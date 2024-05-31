@@ -44,8 +44,7 @@ class MMGame extends Component {
   generateGrid = () => {
     const {gridSize} = this.state
     const newHighlightedCells = []
-    // eslint-disable-next-line
-    for (let i = 0; i < gridSize; i = i + 1) {
+    for (let i = 0; i < gridSize; i += 1) {
       const randomRow = Math.floor(Math.random() * gridSize)
       const randomCol = Math.floor(Math.random() * gridSize)
       newHighlightedCells.push({row: randomRow, col: randomCol})
@@ -53,7 +52,7 @@ class MMGame extends Component {
     this.setState({highlightedCells: newHighlightedCells})
     setTimeout(() => {
       this.setState({highlightedCells: [{}]})
-    }, 5000) // Adjust time here (5 seconds)
+    }, 5000)
   }
 
   nextLevel = () => {
