@@ -61,7 +61,7 @@ const MMRules = () => (
               </li>
             </ul>
           </div>
-          <Link to="/memory-matrix-game-play" className="game-start-btn">
+          <Link to="/memory-matrix-play" className="game-start-btn">
             <div className="mm-game-start-btn-container">
               <button type="button" className="mm-game-start-btn">
                 Start playing

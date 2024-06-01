@@ -91,7 +91,7 @@ const RPSRules = () => (
               </div>
             </ul>
           </div>
-          <Link to="/rock-paper-scissor-game-play" className="game-start-btn">
+          <Link to="/rock-paper-scissor-play" className="game-start-btn">
             <div className="rps-game-start-btn-container">
               <button type="button" className="rps-game-start-btn">
                 Start playing

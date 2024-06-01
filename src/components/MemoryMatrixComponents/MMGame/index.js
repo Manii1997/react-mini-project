@@ -3,114 +3,107 @@ import {Link} from 'react-router-dom'
 import {BiArrowBack} from 'react-icons/bi'
 import {CgClose} from 'react-icons/cg'
 import Modal from 'react-modal'
-import './index.css'
-
 import MMResult from '../MMResult'
-
-const oneLevelArray = ['', '', '']
+import './index.css'
 
 class MMGame extends Component {
   state = {
+    gridSize: 0,
+    highlightedBoxes: [],
+    selectedBoxes: [],
+    isClickable: false,
+    modalIsOpen: false,
     level: 1,
-    highlightedCells: [{}],
-    gridSize: 3,
-    levelArray: oneLevelArray,
-    clickedCells: [{}],
     showResults: false,
   }
 
   componentDidMount() {
-    this.generateGrid()
+    this.initializeLevel()
   }
 
-  onClickPlayAgain = () => {
+  initializeLevel = () => {
+    const {level} = this.state
+    const gridSize = level + 2 // Initial gridSize starts from 3
+    const highlightedBoxes = this.generateHighlightedBoxes(gridSize)
     this.setState({
-      level: 1,
-      highlightedCells: [],
-      clickedCells: [],
-      showResults: false,
+      gridSize,
+      highlightedBoxes,
+      isClickable: false,
+      selectedBoxes: [],
     })
-    this.generateGrid()
+
+    setTimeout(() => {
+      this.setState({isClickable: true})
+    }, gridSize * 1000)
   }
 
-  onClickOpenModal = () => {
+  generateHighlightedBoxes = gridSize => {
+    const highlightedBoxes = []
+    while (highlightedBoxes.length < gridSize) {
+      const randomIndex = Math.floor(Math.random() * gridSize * gridSize)
+      if (!highlightedBoxes.includes(randomIndex)) {
+        highlightedBoxes.push(randomIndex)
+      }
+    }
+    return highlightedBoxes
+  }
+
+  handleCellClick = index => {
+    const {isClickable, highlightedBoxes, selectedBoxes} = this.state
+
+    if (!isClickable) return
+
+    const isHighlighted = highlightedBoxes.includes(index)
+    const updatedSelectedBoxes = [...selectedBoxes, index]
+
+    if (isHighlighted) {
+      this.setState({selectedBoxes: updatedSelectedBoxes})
+
+      if (updatedSelectedBoxes.length === highlightedBoxes.length) {
+        this.advanceToNextLevel()
+      }
+    } else {
+      this.setState({showResults: true})
+    }
+  }
+
+  advanceToNextLevel = () => {
+    this.setState(
+      prevState => ({
+        level: prevState.level + 1,
+      }),
+      this.initializeLevel,
+    )
+  }
+
+  handlePlayAgain = () => {
+    this.setState(
+      {
+        level: 1,
+        showResults: false,
+      },
+      this.initializeLevel,
+    )
+  }
+
+  openModal = () => {
     this.setState({modalIsOpen: true})
   }
 
-  onClickCloseModal = () => {
+  closeModal = () => {
     this.setState({modalIsOpen: false})
   }
 
-  generateGrid = () => {
-    const {gridSize} = this.state
-    const newHighlightedCells = []
-    for (let i = 0; i < gridSize; i += 1) {
-      const randomRow = Math.floor(Math.random() * gridSize)
-      const randomCol = Math.floor(Math.random() * gridSize)
-      newHighlightedCells.push({row: randomRow, col: randomCol})
-    }
-    this.setState({highlightedCells: newHighlightedCells})
-    setTimeout(() => {
-      this.setState({highlightedCells: [{}]})
-    }, 5000)
-  }
-
-  nextLevel = () => {
-    this.setState(prevState => ({
-      level: prevState.level + 1,
-      levelArray: [...prevState.levelArray, ''],
-      gridSize: prevState.gridSize + 1,
-    }))
-    this.componentDidMount()
-  }
-
-  currentLevel = () => {
-    this.setState({
-      level: 1,
-      levelArray: oneLevelArray,
-      gridSize: 3,
-    })
-    this.componentDidMount()
-  }
-
-  evaluate = (clickedCells, highlightedCells) =>
-    highlightedCells.every(highlightedCell =>
-      clickedCells.some(
-        clickedCell =>
-          clickedCell.row === highlightedCell.row &&
-          clickedCell.col === highlightedCell.col,
-      ),
-    )
-
-  handleCellClick = (row, col) => {
-    const {clickedCells, highlightedCells, level} = this.state
-    const clickedCell = {row, col}
-    const newClickedCells = [...clickedCells, clickedCell]
-
-    if (highlightedCells.length === 0) {
-      return
-    }
-
-    if (newClickedCells.length === level + 2) {
-      if (this.evaluate(newClickedCells, highlightedCells)) {
-        if (level === 15) {
-          this.setState({showResults: true})
-        } else {
-          this.nextLevel()
-        }
-      } else {
-        this.setState({showResults: true})
-      }
-    } else {
-      this.setState({
-        clickedCells: newClickedCells,
-      })
-    }
-  }
-
   render() {
-    const {highlightedCells, clickedCells, levelArray, modalIsOpen} = this.state
-    const {level, showResults} = this.state
+    const {
+      gridSize,
+      highlightedBoxes,
+      selectedBoxes,
+      isClickable,
+      level,
+      showResults,
+      modalIsOpen,
+    } = this.state
 
     return (
       <div className="mm-game-main-container">
@@ -124,20 +117,20 @@ class MMGame extends Component {
           <button
             type="button"
             className="mm-game-pop-up-rule"
-            onClick={this.onClickOpenModal}
+            onClick={this.openModal}
           >
             Rules
           </button>
           <Modal
             isOpen={modalIsOpen}
-            onRequestClose={this.onClickCloseModal}
+            onRequestClose={this.closeModal}
             className="mm-game-modal"
             overlayClassName="mm-game-overlay"
           >
             <div className="mm-game-rules-modal-content-container">
               <button
                 type="button"
-                onClick={this.onClickCloseModal}
+                onClick={this.closeModal}
                 className="mm-game-close-btn"
                 data-testid="close"
               >
@@ -185,38 +178,46 @@ class MMGame extends Component {
           </Modal>
         </div>
         {showResults ? (
-          <MMResult level={level} onClickPlayAgain={this.onClickPlayAgain} />
+          <MMResult level={level} onClickPlayAgain={this.handlePlayAgain} />
         ) : (
           <div>
             <h1 className="mm-game-heading">Memory Matrix</h1>
             <p className="mm-levels">Level - {level}</p>
             <table className="grid">
-              {levelArray.map((eachRow, rowIndex) => (
-                <tr>
-                  {levelArray.map((each, colIndex) => (
-                    <td
-                      className={`cell ${
-                        highlightedCells.some(
-                          cell =>
-                            cell.row === rowIndex && cell.col === colIndex,
-                        )
-                          ? 'highlighted'
-                          : ''
-                      }${
-                        clickedCells.some(
-                          cell =>
-                            cell.row === rowIndex && cell.col === colIndex,
-                        )
-                          ? 'clicked'
-                          : ''
-                      }`}
-                      onClick={() => this.handleCellClick(rowIndex, colIndex)}
-                    >
-                      {}
-                    </td>
-                  ))}
-                </tr>
-              ))}
+              <tbody>
+                {Array.from({length: gridSize}).map((_, rowIndex) => (
+                  <tr>
+                    {Array.from({length: gridSize}).map((__, colIndex) => {
+                      const cellIndex = rowIndex * gridSize + colIndex
+                      const isHighlighted = highlightedBoxes.includes(cellIndex)
+                      const isSelected = selectedBoxes.includes(cellIndex)
+                      const testData = isHighlighted
+                        ? 'highlighted'
+                        : 'notHighlighted'
+                      return (
+                        <td>
+                          <button
+                            type="button"
+                            className={`cell ${
+                              isHighlighted ? 'highlighted' : ''
+                            } ${isSelected ? 'selected' : ''}`}
+                            onClick={() => this.handleCellClick(cellIndex)}
+                            data-testid={`cell ${
+                              isHighlighted ? 'highlighted' : 'notHighlighted'
+                            }`}
+                            data-test={testData}
+                            disabled={!isClickable}
+                          >
+                            <span className="visually-hidden">
+                              Click to select cell
+                            </span>
+                          </button>
+                        </td>
+                      )
+                    })}
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         )}

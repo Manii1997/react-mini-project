@@ -7,7 +7,7 @@ const MMResult = props => {
   const percentage = (level * 100) / 15
   return (
     <div className="progress-bar-bg">
-      <div className="progress-bar-emojis-container">
+      <div className="progress-bar-emoji-container">
         <img
           src="https://res.cloudinary.com/dv6ikqksk/image/upload/v1711000742/05_Pokerface_xnvjfb.png"
           alt="emoji"

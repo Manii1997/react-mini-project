@@ -24,11 +24,11 @@ const App = () => (
     <Route exact path="/rock-paper-scissor" component={RPSRules} />
     <Route
       exact
-      path="/rock-paper-scissor-game-play"
+      path="/rock-paper-scissor-play"
       component={RockPaperScissors}
     />
     <Route exact path="/memory-matrix" component={MMGameRules} />
-    <Route exact path="/memory-matrix-game-play" component={MMGame} />
+    <Route exact path="/memory-matrix-play" component={MMGame} />
     <Route exact path="/card-flip-memory-game" component={CFRules} />
     <Route exact path="/card-flip-memory-game-play" component={CFGame} />
   </Switch>

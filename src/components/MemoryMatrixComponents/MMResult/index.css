@@ -61,6 +61,11 @@
   color: #ffffff;
 }
 
+.progress-bar-emojis-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 @media screen and (max-width: 768px) {
   .progress-bar-emojis-container {
     width: 311px;
