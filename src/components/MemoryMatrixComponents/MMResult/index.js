@@ -10,42 +10,42 @@ const MMResult = props => {
       <div className="progress-bar-emoji-container">
         <img
           src="https://res.cloudinary.com/dv6ikqksk/image/upload/v1711000742/05_Pokerface_xnvjfb.png"
-          alt="emoji"
+          alt="neutral face"
           className="progress-bar-emoji"
         />
         <img
           src="https://res.cloudinary.com/dv6ikqksk/image/upload/v1711000801/07_Grimmace_n4lx7r.png"
-          alt="emoji"
+          alt="grimacing face"
           className="progress-bar-emoji"
         />
         <img
           src="https://res.cloudinary.com/dv6ikqksk/image/upload/v1711000716/01_Smile_wuwllh.png"
-          alt="emoji"
+          alt="slightly smiling face"
           className="progress-bar-emoji"
         />
         <img
           src="https://res.cloudinary.com/dv6ikqksk/image/upload/v1711000762/03_Optimistic_wzbf7s.png"
-          alt="emoji"
+          alt="grinning face with big eyes"
           className="progress-bar-emoji"
         />
         <img
           src="https://res.cloudinary.com/dv6ikqksk/image/upload/v1711000826/04_Grin_rmlxkc.png"
-          alt="emoji"
+          alt="grinning face with smiling eyes"
           className="progress-bar-emoji"
         />
         <img
           src="https://res.cloudinary.com/dv6ikqksk/image/upload/v1711000848/05_Laugh_qatkkp.png"
-          alt="emoji"
+          alt="beaming face with smiling eyes"
           className="progress-bar-emoji"
         />
         <img
           src="https://res.cloudinary.com/dv6ikqksk/image/upload/v1711000870/02_Happy_fciroi.png"
-          alt="emoji"
+          alt="grinning face"
           className="progress-bar-emoji"
         />
         <img
           src="https://res.cloudinary.com/dv6ikqksk/image/upload/v1711000891/02_Like_a_boss_cjrvqq.png"
-          alt="emoji"
+          alt="smiling face with sunglasses"
           className="progress-bar-emoji"
         />
       </div>
