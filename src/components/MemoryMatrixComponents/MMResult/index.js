@@ -51,7 +51,7 @@ const MMResult = props => {
       </div>
       <Line
         percent={percentage}
-        strokeWidth={4}
+        strokeWidth={2}
         strokeColor="blue"
         className="progress-bar"
       />

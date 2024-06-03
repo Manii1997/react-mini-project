@@ -35,6 +35,7 @@
 }
 
 .progress-bar {
+  margin-top: 20px;
   width: 720px;
 }
 
@@ -44,7 +45,7 @@
 }
 
 .congratulations-heading {
-  color: blue;
+  color: #fff;
   font-size: 42px;
   font-family: bree serif;
 }

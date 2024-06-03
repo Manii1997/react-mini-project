@@ -21,9 +21,13 @@ class MMGame extends Component {
     this.initializeLevel()
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.clickTimeout)
+  }
+
   initializeLevel = () => {
     const {level} = this.state
-    const gridSize = level + 2 // Initial gridSize starts from 3
+    const gridSize = level + 2
     const highlightedBoxes = this.generateHighlightedBoxes(gridSize)
     this.setState({
       gridSize,
@@ -34,6 +38,14 @@ class MMGame extends Component {
 
     setTimeout(() => {
       this.setState({isClickable: true})
+      this.startClickTimer(gridSize)
+    }, gridSize * 1000)
+  }
+
+  startClickTimer = gridSize => {
+    clearTimeout(this.clickTimeout)
+    this.clickTimeout = setTimeout(() => {
+      this.setState({showResults: true})
     }, gridSize * 1000)
   }
 
@@ -52,6 +64,8 @@ class MMGame extends Component {
     const {isClickable, highlightedBoxes, selectedBoxes} = this.state
 
     if (!isClickable) return
+
+    clearTimeout(this.clickTimeout)
 
     const isHighlighted = highlightedBoxes.includes(index)
     const updatedSelectedBoxes = [...selectedBoxes, index]
@@ -178,7 +192,9 @@ class MMGame extends Component {
           </Modal>
         </div>
         {showResults ? (
-          <MMResult level={level} onClickPlayAgain={this.handlePlayAgain} />
+          <div className="mm-game-results">
+            <MMResult level={level} onClickPlayAgain={this.handlePlayAgain} />
+          </div>
         ) : (
           <div>
             <h1 className="mm-game-heading">Memory Matrix</h1>
@@ -202,16 +218,13 @@ class MMGame extends Component {
                               isHighlighted ? 'highlighted' : ''
                             } ${isSelected ? 'selected' : ''}`}
                             onClick={() => this.handleCellClick(cellIndex)}
-                            data-testid={`cell ${
+                            data-testid={`${
                               isHighlighted ? 'highlighted' : 'notHighlighted'
                             }`}
                             data-test={testData}
                             disabled={!isClickable}
-                          >
-                            <span className="visually-hidden">
-                              Click to select cell
-                            </span>
-                          </button>
+                            aria-label=" "
+                          />
                         </td>
                       )
                     })}

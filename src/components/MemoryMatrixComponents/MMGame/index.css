@@ -150,14 +150,6 @@
   vertical-align: middle;
 }
 
-.highlighted {
-  background-color: blue;
-}
-
-.clicked {
-  background-color: red;
-}
-
 .grid {
   display: grid;
   gap: 2px;
@@ -188,7 +180,7 @@ button:disabled {
 }
 
 .selected {
-  background-color: red;
+  background-color: blue;
 }
 
 .cell:disabled.highlighted {
